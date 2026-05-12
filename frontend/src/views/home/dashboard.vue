@@ -29,7 +29,7 @@
       </el-card>
       <el-card class="stat-card dept-card">
         <div class="stat-icon">
-          <el-icon><Building /></el-icon>
+          <el-icon><OfficeBuilding /></el-icon>
         </div>
         <div class="stat-info">
           <div class="stat-value">{{ deptCount }}</div>
@@ -71,6 +71,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { patientApi, doctorApi, departmentApi, appointmentApi } from '@/api'
+import {Calendar, OfficeBuilding, UserFilled} from "@element-plus/icons-vue";
 
 const patientCount = ref(0)
 const doctorCount = ref(0)

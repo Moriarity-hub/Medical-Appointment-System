@@ -12,7 +12,7 @@
       <el-button type="success" @click="$router.push('/home/patients/add')">添加患者</el-button>
     </div>
 
-    <el-table :data="patients" border stripe>
+    <el-table :data="filteredPatients" border stripe>
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="name" label="姓名" />
       <el-table-column prop="idCard" label="身份证号" />

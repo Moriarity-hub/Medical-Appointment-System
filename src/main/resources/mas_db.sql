@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS patient (
                                        id_card VARCHAR(18) UNIQUE COMMENT '身份证号码',
                                        phone VARCHAR(20) NOT NULL COMMENT '联系电话',
                                        email VARCHAR(100) COMMENT '邮箱',
+                                       password VARCHAR(255) COMMENT '密码',
                                        address VARCHAR(200) COMMENT '地址',
                                        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
@@ -73,3 +74,21 @@ INSERT INTO doctor (name, title, specialty, phone, department_id) VALUES
                                                                       ('周八', '副主任医师', '儿科', '13800138006', 4),
                                                                       ('吴九', '主治医师', '急诊科', '13800138007', 5)
 ON DUPLICATE KEY UPDATE title = VALUES(title), specialty = VALUES(specialty), phone = VALUES(phone), department_id = VALUES(department_id);
+-- 添加用户表
+CREATE TABLE IF NOT EXISTS user (
+                                    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID',
+                                    username VARCHAR(50) NOT NULL UNIQUE COMMENT '用户名（手机号）',
+                                    password VARCHAR(255) NOT NULL COMMENT '密码',
+                                    role VARCHAR(20) NOT NULL COMMENT '角色：PATIENT, DOCTOR, ADMIN',
+                                    related_id BIGINT COMMENT '关联的患者ID或医生ID',
+                                    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+
+-- 添加患者表的password字段
+ALTER TABLE patient ADD COLUMN password VARCHAR(255) COMMENT '密码';
+
+-- 插入默认管理员（密码：admin123）
+INSERT INTO user (username, password, role) VALUES
+    ('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IjzqAKL9xL5jvMFVdNJHvGCgTq/VEq', 'ADMIN')
+ON DUPLICATE KEY UPDATE password = VALUES(password);

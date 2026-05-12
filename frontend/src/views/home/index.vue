@@ -3,7 +3,7 @@
   <el-container style="height: 100vh">
     <el-aside width="220px" style="background-color: #2f4050;">
       <div class="logo">
-        <el-icon class="logo-icon"><Hospital /></el-icon>
+        <el-icon class="logo-icon"><OfficeBuilding /></el-icon>
         <span class="logo-text">医疗预约系统</span>
       </div>
       <el-menu
@@ -14,7 +14,7 @@
           @select="handleMenuSelect"
       >
         <el-menu-item index="/home">
-          <el-icon><Home /></el-icon>
+          <el-icon><HomeFilled /></el-icon>
           <span>首页</span>
         </el-menu-item>
         <el-sub-menu index="patient">
@@ -35,7 +35,7 @@
         </el-sub-menu>
         <el-sub-menu index="department">
           <template #title>
-            <el-icon><Building /></el-icon>
+            <el-icon><House /></el-icon>
             <span>科室管理</span>
           </template>
           <el-menu-item index="/home/departments">科室列表</el-menu-item>
@@ -60,7 +60,7 @@
               <span class="user-name">
                 <el-icon><User /></el-icon>
                 {{ userName }}
-                <el-icon class="el-icon--right"><ChevronDown /></el-icon>
+                <el-icon class="el-icon--right"><ArrowDown /></el-icon>
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -85,6 +85,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import {HomeFilled, User, UserFilled, OfficeBuilding, Calendar, ArrowDown, Link, House} from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()

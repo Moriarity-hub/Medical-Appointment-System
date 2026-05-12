@@ -16,17 +16,16 @@
         <span
             :class="{ active: !isLogin }"
             @click="isLogin = false"
-        >注册</span>
+        >患者注册</span>
       </div>
 
       <!-- 登录表单 -->
-      <el-form v-if="isLogin" :model="loginForm" :rules="loginRules" ref="loginFormRef" label-width="80px" class="form"  @submit.prevent>
-        <el-form-item label="手机号" prop="phone">
+      <el-form v-if="isLogin" :model="loginForm" :rules="loginRules" ref="loginFormRef" label-width="120px" class="form">
+        <el-form-item label="用户名/手机号" prop="username">
           <el-input
-              v-model="loginForm.phone"
-              placeholder="请输入手机号"
-              type="tel"
-              prefix-icon="Phone"
+              v-model="loginForm.username"
+              placeholder="患者/医生请输入手机号"
+              prefix-icon="User"
           />
         </el-form-item>
         <el-form-item label="密码" prop="password">
@@ -41,7 +40,7 @@
           <el-button type="primary" @click="login" class="submit-btn" :loading="loading">登录</el-button>
         </el-form-item>
         <div class="form-tips">
-          <p>提示：初始密码为手机号后6位</p>
+          <p>提示：患者/医生初始密码为手机号后6位</p>
         </div>
       </el-form>
 
@@ -87,7 +86,7 @@
         <el-form-item label="密码" prop="password">
           <el-input
               v-model="registerForm.password"
-              placeholder="请设置密码（不设置则默认为手机号后6位）"
+              placeholder="不设置则默认为手机号后6位"
               type="password"
               prefix-icon="Lock"
           />
@@ -104,6 +103,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { OfficeBuilding } from '@element-plus/icons-vue'
 import { authApi } from '@/api'
 
 const router = useRouter()
@@ -113,14 +113,13 @@ const loading = ref(false)
 // 登录表单
 const loginFormRef = ref(null)
 const loginForm = reactive({
-  phone: '',
+  username: '',
   password: ''
 })
 
 const loginRules = {
-  phone: [
-    { required: true, message: '请输入手机号', trigger: 'blur' },
-    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
+  username: [
+    { required: true, message: '请输入用户名或手机号', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -152,31 +151,6 @@ const registerRules = {
   ],
 }
 
-const login = async () => {
-  if (!loginFormRef.value) return
-  const valid = await loginFormRef.value.validate()
-  if (!valid) return
-
-  loading.value = true
-  try {
-    const res = await authApi.login(loginForm)
-    if (res.data.code === 200) {
-      localStorage.setItem('token', res.data.data.token)
-      localStorage.setItem('userId', res.data.data.userId)
-      localStorage.setItem('userName', res.data.data.userName)
-      localStorage.setItem('phone', res.data.data.phone)
-      ElMessage.success('登录成功')
-      router.push('/home')
-    } else {
-      ElMessage.error(res.data.message || '登录失败')
-    }
-  } catch (error) {
-    ElMessage.error(error.response?.data?.message || '登录失败')
-  } finally {
-    loading.value = false
-  }
-}
-
 const register = async () => {
   if (!registerFormRef.value) return
   const valid = await registerFormRef.value.validate()
@@ -197,6 +171,41 @@ const register = async () => {
     }
   } catch (error) {
     ElMessage.error(error.response?.data?.message || '注册失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const login = async () => {
+  if (!loginFormRef.value) return
+  const valid = await loginFormRef.value.validate()
+  if (!valid) return
+
+  loading.value = true
+  try {
+    const res = await authApi.login({ phone: loginForm.username, password: loginForm.password })
+    if (res.data.code === 200) {
+      localStorage.setItem('token', res.data.data.token)
+      localStorage.setItem('userId', res.data.data.userId)
+      localStorage.setItem('userName', res.data.data.userName)
+      localStorage.setItem('phone', res.data.data.phone)
+      localStorage.setItem('role', res.data.data.role) // 保存角色
+      localStorage.setItem('relatedId', res.data.data.relatedId) // 保存关联ID
+      ElMessage.success('登录成功')
+
+      // 根据角色跳转
+      if (res.data.data.role === 'PATIENT') {
+        router.push('/patient')
+      } else if (res.data.data.role === 'DOCTOR') {
+        router.push('/doctor')
+      } else if (res.data.data.role === 'ADMIN') {
+        router.push('/home')
+      }
+    } else {
+      ElMessage.error(res.data.message || '登录失败')
+    }
+  } catch (error) {
+    ElMessage.error(error.response?.data?.message || '登录失败')
   } finally {
     loading.value = false
   }
@@ -262,6 +271,19 @@ const register = async () => {
 
 .form {
   margin-top: 10px;
+}
+
+.form :deep(.el-form-item) {
+  margin-bottom: 20px;
+}
+
+.form :deep(.el-form-item__label) {
+  text-align: left;
+  white-space: nowrap;
+}
+
+.form :deep(.el-form-item__content) {
+  flex: 1;
 }
 
 .submit-btn {
