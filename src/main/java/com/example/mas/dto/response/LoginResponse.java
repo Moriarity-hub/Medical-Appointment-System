@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponse {
-
     private String token;
-    private String tokenType = "Bearer";
+    private String tokenType;
     private Long userId;
     private String userName;
     private String phone;
+    private String role; // 新增角色字段
+    private Long relatedId; // 关联的患者/医生ID
 }

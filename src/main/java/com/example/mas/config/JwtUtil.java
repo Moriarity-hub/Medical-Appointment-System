@@ -1,3 +1,4 @@
+// D:\maven_project\mas\src\main\java\com\example\mas\config\JwtUtil.java
 package com.example.mas.config;
 
 import io.jsonwebtoken.Claims;
@@ -17,7 +18,6 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    // 至少32字节的密钥用于HS256算法
     private static final String SECRET_KEY = "mas-medical-appointment-system-secret-key-must-have-at-least-32-bytes";
     private static final long EXPIRATION_TIME = 86400000; // 24小时
 
@@ -26,13 +26,14 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String phone, Long userId) {
+    public String generateToken(String username, Long userId, String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
+        claims.put("role", role);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(phone)
+                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey())
@@ -47,12 +48,16 @@ public class JwtUtil {
                 .getPayload();
     }
 
-    public String getPhoneFromToken(String token) {
+    public String getUsernameFromToken(String token) {
         return parseToken(token).getSubject();
     }
 
     public Long getUserIdFromToken(String token) {
         return parseToken(token).get("userId", Long.class);
+    }
+
+    public String getRoleFromToken(String token) {
+        return parseToken(token).get("role", String.class);
     }
 
     public boolean validateToken(String token) {
