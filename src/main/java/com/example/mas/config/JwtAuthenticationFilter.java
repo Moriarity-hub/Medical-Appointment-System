@@ -19,6 +19,7 @@ import java.util.Collections;
 
 /**
  * JWT认证过滤器
+ * 用于验证请求中的JWT token
  */
 @Component
 @RequiredArgsConstructor

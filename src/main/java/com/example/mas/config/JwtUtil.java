@@ -14,6 +14,7 @@ import java.util.Map;
 
 /**
  * JWT工具类
+ * 用于生成、解析、验证JWT token
  */
 @Component
 public class JwtUtil {

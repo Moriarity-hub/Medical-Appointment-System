@@ -12,7 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
- * 数据初始化器 - 启动时创建默认管理员用户
+ * 数据初始化器 - 启动时创建默认管理员用户和医生用户
+ * 该类在应用启动时加载，确保数据库中存在默认的管理员用户和医生用户
  */
 @Component
 @RequiredArgsConstructor

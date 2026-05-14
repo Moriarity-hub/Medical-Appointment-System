@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * Spring Security配置类
+ * 用于配置Spring Boot应用的Security策略
  */
 @Configuration
 @EnableWebSecurity

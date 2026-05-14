@@ -10,6 +10,9 @@ import java.util.Arrays;
 
 /**
  * CORS跨域配置类
+ * 用于配置Spring Boot应用的CORS跨域策略
+ * 包含允许的来源、请求头、请求方法、响应头、允许的请求头等
+ * 该配置类在应用启动时加载，确保所有请求都符合CORS策略
  */
 @Configuration
 public class CorsConfig {

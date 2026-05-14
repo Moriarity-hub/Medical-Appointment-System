@@ -1,4 +1,3 @@
-// D:\maven_project\mas\src\main\java\com\example\mas\repository\UserRepository.java
 package com.example.mas.repository;
 
 import com.example.mas.entity.User;

@@ -1,4 +1,3 @@
-// D:\maven_project\mas\src\main\java\com\example\mas\dto\request\LoginRequest.java
 package com.example.mas.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
